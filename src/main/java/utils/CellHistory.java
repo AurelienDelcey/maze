@@ -59,8 +59,10 @@ public class CellHistory {
 	
 	public boolean canMove(MoveSet direction) {
 		for (int i = 0; i < freeDirection.length; i++) {
-			if(this.freeDirection[i].equals(direction)) {
-				return true;
+			if(this.freeDirection[i]!=null) {
+				if(this.freeDirection[i].equals(direction)) {
+					return true;
+				}
 			}
 		}
 		return false;

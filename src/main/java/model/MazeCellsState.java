@@ -1,5 +1,5 @@
 package model;
 
 public enum MazeCellsState {
-	EMPTY, WALL, GOAL, START, PLAYER;
+	EMPTY, WALL, GOAL, START, PLAYER, NEW;
 }
