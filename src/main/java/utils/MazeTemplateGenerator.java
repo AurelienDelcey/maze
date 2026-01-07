@@ -8,7 +8,6 @@ import model.MoveSet;
 
 public class MazeTemplateGenerator {
 	
-	private TemplateCell current ;
 	private final int size;
 	private final Random rand ;
 	private final int[] cursor ;
@@ -22,7 +21,6 @@ public class MazeTemplateGenerator {
 		this.size = size;
 		this.rand = new Random();
 		this.cursor = new int[]{0,0};
-		this.current = null;
 		mazeTemplate = new TemplateCell[this.size][this.size];
 	}
 	
@@ -34,10 +32,10 @@ public class MazeTemplateGenerator {
 		
 		
 		setCursorStart();
-		this.current = getCurrent();
-		stack.push(this.current);
+		
+		stack.push(getCurrentCell());
 		while (true) {
-			this.current.setVisited();
+			getCurrentCell().setVisited();
 			possibleMove = searchPossibleMoves();
 			while (possibleMove == null) {
 				if (stack.isEmpty()) {
@@ -46,7 +44,7 @@ public class MazeTemplateGenerator {
 				TemplateCell popCell = this.stack.peek();
 				cursor[0] = popCell.getxCoordinate();
 				cursor[1] = popCell.getyCoordinate();
-				this.current = getCurrent();
+				
 				possibleMove = searchPossibleMoves();
 				if(possibleMove==null) {
 					this.stack.pop();
@@ -55,8 +53,8 @@ public class MazeTemplateGenerator {
 			nextMove = getRandomMove(possibleMove);
 			openWay(nextMove);
 			moveCursor(nextMove);
-			this.current = getCurrent();
-			stack.push(this.current);
+			
+			stack.push(getCurrentCell());
 		}
 	}
 	
@@ -148,7 +146,7 @@ public class MazeTemplateGenerator {
 		return moveSet[rand.nextInt(moveSet.length)];
 	}
 	
-	private TemplateCell getCurrent() {
+	private TemplateCell getCurrentCell() {
 		return this.mazeTemplate[cursor[0]][cursor[1]];
 	}
 }
