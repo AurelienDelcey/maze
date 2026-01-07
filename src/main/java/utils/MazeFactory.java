@@ -7,37 +7,20 @@ import model.MoveSet;
 public class MazeFactory {
 	
 	private int size;
-	private int finalSize;
 	private MazeCells[][] finalMaze;
 	private MazeTemplateGenerator mazeGen;
 	
 	
 	
 	public MazeFactory(int size) {
-		
 		this.size = size;
-		int finalSize = getFinalSize();
 		this.mazeGen = new MazeTemplateGenerator(size);
-		finalMaze = new MazeCells[finalSize][finalSize];
+		finalMaze = new MazeCells[(this.size*2)+1][(this.size*2)+1];
 	}
 
 	public MazeCells[][] create() {
 		MazeCells[][] maze = mapMaze(mazeGen.createTemplate());
 		return maze;
-	}
-	
-	public MazeCells[][] create(String debugmode) {
-		MazeCells[][] maze = mapMaze(create_Template_Debug_Lines());
-		print(maze);
-		System.out.println("");
-		System.out.println("");
-		maze = mapMaze(create_Template_Debug_Columns());
-		print(maze);
-		return null;
-	}
-	
-	private int getFinalSize() {
-		return (this.size*2)+1;
 	}
 	
 	private MazeCells[][] mapMaze(CellHistory[][] template){
@@ -47,8 +30,7 @@ public class MazeFactory {
 			for (int j = 0; j < template.length; j++) {
 				int x = (i*2)+1;
 				int y = (j*2)+1;
-				//x = i==0?1:x;
-				//y = j==0?1:y;
+				
 				if(template[i][j].canMove(MoveSet.UP)) {
 					drawUp(this.finalMaze[x][y]);
 				}
@@ -104,42 +86,4 @@ public class MazeFactory {
 		}
 		return maze;
 	}
-	
-	private CellHistory[][] create_Template_Debug_Lines() {
-		CellHistory[][] result = new CellHistory[10][10];
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				result[i][j]=new CellHistory(i,j);
-				result[i][j].deleteFreeDirection(MoveSet.LEFT);
-				result[i][j].deleteFreeDirection(MoveSet.RIGHT);
-			}
-		}
-		return result;
-	}
-	
-	private CellHistory[][] create_Template_Debug_Columns() {
-		CellHistory[][] result = new CellHistory[10][10];
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				result[i][j]=new CellHistory(i,j);
-				result[i][j].deleteFreeDirection(MoveSet.UP);
-				result[i][j].deleteFreeDirection(MoveSet.DOWN);
-			}
-		}
-		return result;
-	}
-	
-	private void print(MazeCells[][] maze) {
-		for (int i = 0; i < maze.length; i++) {
-			for (int j = 0; j < maze.length; j++) {
-				if(maze[i][j].getState()==MazeCellsState.WALL) {
-					System.out.print("|#");
-				}else if(maze[i][j].getState()==MazeCellsState.EMPTY) {
-					System.out.print("| ");
-				}
-			}
-			System.out.print("|\n");
-		}
-	}
-
 }

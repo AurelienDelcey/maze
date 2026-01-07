@@ -82,23 +82,6 @@ public class CellHistory {
 	public MoveSet[] getFreeDirection() {
 		return freeDirection;
 	}
-	
-	public MoveSet[] getDirectionsOnly() {
-		int counter = 0;
-		for (int i = 0; i < freeDirection.length; i++) {
-			if(this.freeDirection[i]!=null) {
-				counter++;
-			}
-		}
-		MoveSet[] result= new MoveSet[counter];
-		counter = 0;
-		for (int i = 0; i < freeDirection.length; i++) {
-			if(this.freeDirection[i]!=null) {
-				result[counter]=this.freeDirection[i];
-			}
-		}
-		return result;
-	}
 
 
 

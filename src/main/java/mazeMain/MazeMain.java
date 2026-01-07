@@ -5,16 +5,12 @@ import static javafx.application.Application.launch;
 import model.MazeCells;
 import model.MazeCellsState;
 import utils.MazeFactory;
-import utils.MazeTemplateGenerator;
 
 public class MazeMain {
 
 	public static void main(String[] args) {
 		
 		MazeFactory factory = new MazeFactory(20);
-		
-		//factory.create("debug");
-		
 		MazeCells[][] maze = factory.create();
 		
 		for (int y = 0; y < maze.length; y++) {

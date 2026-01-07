@@ -1,7 +1,6 @@
 package utils;
 
 import java.util.ArrayDeque;
-//import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Random;
 
@@ -9,9 +8,8 @@ import model.MoveSet;
 
 public class MazeTemplateGenerator {
 	
-	//private final ArrayList<CellHistory> stack ;
-	private int size;
 	private CellHistory current ;
+	private final int size;
 	private final Random rand ;
 	private final int[] cursor ;
 	private final CellHistory[][] mazeTemplate ;
@@ -33,7 +31,6 @@ public class MazeTemplateGenerator {
 		MoveSet[] possibleMove = null;
 		MoveSet nextMove = null;
 		initArray();
-		//initMazeBorder();
 		
 		
 		setCursorStart();
@@ -41,10 +38,9 @@ public class MazeTemplateGenerator {
 		stack.push(this.current);
 		while (true) {
 			this.current.setVisited();
-			possibleMove = searchPossibleMoves(); //null if no move find
+			possibleMove = searchPossibleMoves();
 			while (possibleMove == null) {
 				if (stack.isEmpty()) {
-					checkTemplate();
 					return this.mazeTemplate;
 				}
 				CellHistory popCell = this.stack.peek();
@@ -73,37 +69,6 @@ public class MazeTemplateGenerator {
 		
 	}
 	
-	private void checkTemplate() {
-		for (int i = 0; i <this.size; i++) {
-			for (int j = 0; j <this.size; j++) {
-				if(!this.mazeTemplate[i][j].isVisited()) {
-					System.out.println("non visited detected");
-				}
-			}
-		}
-		for (int i = 0; i <this.size; i++) {
-			for (int j = 0; j <this.size; j++) {
-				System.out.print("i="+this.mazeTemplate[i][j].getxCoordinate());
-				System.out.print(" / j="+this.mazeTemplate[i][j].getyCoordinate());
-				for (int j2 = 0; j2 < this.mazeTemplate[i][j].getFreeDirection().length; j2++) {
-					if(this.mazeTemplate[i][j].getFreeDirection()[j2]!=null) {
-						switch(this.mazeTemplate[i][j].getFreeDirection()[j2]) {
-						case UP: System.out.print("/UP/");break;
-						case DOWN: System.out.print("/DOWN/");break;
-						case LEFT: System.out.print("/LEFT/");break;
-						case RIGHT: System.out.print("/RIGHT/");break;
-						}
-					}
-				}
-				System.out.println("");
-			}
-		}
-	}
-	
-	/*public void setSize(int size) {
-		this.size = size;
-	}*/
-
 	private void initArray() {
 		for (int i = 0; i < this.mazeTemplate.length; i++) {
 			for (int j = 0; j < this.mazeTemplate.length; j++) {
@@ -114,19 +79,20 @@ public class MazeTemplateGenerator {
 	}
 	
 	private MoveSet getInverseMove(MoveSet move) {
-		if(move == MoveSet.DOWN) {return MoveSet.UP;}
-		if(move == MoveSet.UP) {return MoveSet.DOWN;}
-		if(move == MoveSet.LEFT) {return MoveSet.RIGHT;}
-		if(move == MoveSet.RIGHT) {return MoveSet.LEFT;}
-		return null;
+		return switch(move){
+			case UP -> MoveSet.DOWN;
+			case DOWN -> MoveSet.UP;
+			case LEFT -> MoveSet.RIGHT;
+			case RIGHT -> MoveSet.LEFT;
+		};
 	}
 	
 	private void moveCursor(MoveSet move) {
 		switch(move) {
-		case UP: this.cursor[1] -= 1;break;
-		case DOWN: this.cursor[1] += 1;break;
-		case LEFT: this.cursor[0] -= 1;break;
-		case RIGHT: this.cursor[0] += 1;break;
+		case UP ->this.cursor[1] -= 1;
+		case DOWN-> this.cursor[1] += 1;
+		case LEFT-> this.cursor[0] -= 1;
+		case RIGHT-> this.cursor[0] += 1;
 		}
 	}
 	
@@ -184,19 +150,5 @@ public class MazeTemplateGenerator {
 	
 	private CellHistory getCurrent() {
 		return this.mazeTemplate[cursor[0]][cursor[1]];
-	}
-	
-	private void initMazeBorder() {
-		for (int i = 0; i < this.size; i++) {
-			for (int j = 0; j < this.size; j++) {
-				if(i==0) {this.mazeTemplate[i][j].deleteFreeDirection(MoveSet.UP);}
-				
-				if(j==0) {this.mazeTemplate[i][j].deleteFreeDirection(MoveSet.LEFT);}
-				
-				if(i==this.size-1) {this.mazeTemplate[i][j].deleteFreeDirection(MoveSet.DOWN);}
-				
-				if(j==this.size-1) {this.mazeTemplate[i][j].deleteFreeDirection(MoveSet.RIGHT);				}
-			}
-		}
 	}
 }
