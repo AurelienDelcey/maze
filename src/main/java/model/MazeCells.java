@@ -12,7 +12,7 @@ public class MazeCells {
 		super();
 		this.xCoordonate = xCoordonate;
 		this.yCoordonate = yCoordonate;
-		this.state = MazeCellsState.NEW;
+		this.state = MazeCellsState.EMPTY;
 	}
 
 	public MazeCellsState getState() {

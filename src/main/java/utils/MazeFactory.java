@@ -7,6 +7,8 @@ import model.MoveSet;
 public class MazeFactory {
 	
 	private int size;
+	private int finalSize;
+	private MazeCells[][] finalMaze;
 	private MazeTemplateGenerator mazeGen;
 	
 	
@@ -14,7 +16,9 @@ public class MazeFactory {
 	public MazeFactory(int size) {
 		
 		this.size = size;
+		int finalSize = getFinalSize();
 		this.mazeGen = new MazeTemplateGenerator(size);
+		finalMaze = new MazeCells[finalSize][finalSize];
 	}
 
 	public MazeCells[][] create() {
@@ -37,96 +41,59 @@ public class MazeFactory {
 	}
 	
 	private MazeCells[][] mapMaze(CellHistory[][] template){
-		int finalSize = getFinalSize();
-		MazeCells[][] finalMaze = new MazeCells[finalSize][finalSize];
-		finalMaze = initMaze(finalMaze);
+		this.finalMaze = initMaze(this.finalMaze);
 		
-		for (int i = 0; i < finalSize; i++) {
-			for (int j = 0; j < finalSize; j++) {
+		for (int i = 0; i < template.length; i++) {
+			for (int j = 0; j < template.length; j++) {
+				int x = (i*2)+1;
+				int y = (j*2)+1;
+				//x = i==0?1:x;
+				//y = j==0?1:y;
+				if(template[i][j].canMove(MoveSet.UP)) {
+					drawUp(this.finalMaze[x][y]);
+				}
+				if(template[i][j].canMove(MoveSet.DOWN)) {
+					drawDown(this.finalMaze[x][y]);
+				}
+				if(template[i][j].canMove(MoveSet.LEFT)) {
+					drawLeft(this.finalMaze[x][y]);
+				}
+				if(template[i][j].canMove(MoveSet.RIGHT)) {
+					drawRight(this.finalMaze[x][y]);
+				}
+			}
+		}
+		finalizeMaze();
+		return finalMaze;
+	}
+	
+	
+	
+	private void finalizeMaze() {
+		for (int i = 0; i < finalMaze.length; i++) {
+			for (int j = 0; j < finalMaze.length; j++) {
+				if(i==0 || i==finalMaze.length-1 || j==0 || j==finalMaze.length-1 ) {
+					finalMaze[i][j].setState(MazeCellsState.WALL);
+					continue;
+				}
 				if(i%2==0 && j%2==0) {
 					finalMaze[i][j].setState(MazeCellsState.WALL);
 					continue;
 				}
-				if(i==0 || i == finalSize-1 || j==0 || j == finalSize-1 ) {
-					finalMaze[i][j].setState(MazeCellsState.WALL);
-					continue;
-				}
-				if(i%2==1 && j%2==1) {
-					finalMaze[i][j].setState(MazeCellsState.EMPTY);
-					continue;
-				}
-				if((i%2==0 && j%2==1) && j<finalSize-2) {
-					if(i==2) {
-						if(template[i/2][(j+1)/2].canMove(MoveSet.RIGHT)&&template[(i/2)+1][(j+1)/2].canMove(MoveSet.LEFT)) {
-							finalMaze[i][j].setState(MazeCellsState.WALL);
-							continue;
-						}
-						finalMaze[i][j].setState(MazeCellsState.EMPTY);
-						continue;
-						
-					}
-					if(template[i/2][(j+1)/2].canMove(MoveSet.LEFT)&&template[(i/2)-1][(j+1)/2].canMove(MoveSet.RIGHT)) {
-						finalMaze[i][j].setState(MazeCellsState.WALL);
-						continue;
-					}
-					finalMaze[i][j].setState(MazeCellsState.EMPTY);
-					continue;
-					
-				}else if(i%2==0 && j%2==1){
-					if(i==2) {
-						if(template[i/2][this.size-1].canMove(MoveSet.RIGHT)&&template[(i/2)+1][this.size-1].canMove(MoveSet.LEFT)) {
-							finalMaze[i][j].setState(MazeCellsState.WALL);
-							continue;
-						}
-						finalMaze[i][j].setState(MazeCellsState.EMPTY);
-						continue;
-						
-					}
-					if(template[i/2][this.size-1].canMove(MoveSet.LEFT)&&template[(i/2)-1][this.size-1].canMove(MoveSet.RIGHT)) {
-						finalMaze[i][j].setState(MazeCellsState.WALL);
-						continue;
-					}
-					finalMaze[i][j].setState(MazeCellsState.EMPTY);
-					continue;
-				}	
-				if((i%2==1 && j%2==0) && i<finalSize-2) {
-					if(j==2) {
-						if(template[(i+1)/2][j/2].canMove(MoveSet.DOWN) && template[(i+1)/2][(j/2)+1].canMove(MoveSet.UP)) {
-							finalMaze[i][j].setState(MazeCellsState.WALL);
-							continue;
-						}
-						finalMaze[i][j].setState(MazeCellsState.EMPTY);
-						continue;
-						
-					}
-					if(template[(i+1)/2][j/2].canMove(MoveSet.UP) && template[(i+1)/2][(j/2)-1].canMove(MoveSet.DOWN)) {
-						finalMaze[i][j].setState(MazeCellsState.WALL);
-						continue;
-					}
-					finalMaze[i][j].setState(MazeCellsState.EMPTY);
-					continue;
-					
-				}else if(i%2==1 && j%2==0){
-					if(j==2) {
-						if(template[this.size-1][j/2].canMove(MoveSet.DOWN) && template[this.size-1][(j/2)+1].canMove(MoveSet.UP)) {
-							finalMaze[i][j].setState(MazeCellsState.WALL);
-							continue;
-						}
-						finalMaze[i][j].setState(MazeCellsState.EMPTY);
-						continue;
-						
-					}
-					if(template[this.size-1][j/2].canMove(MoveSet.UP) && template[this.size-1][(j/2)-1].canMove(MoveSet.DOWN)) {
-						finalMaze[i][j].setState(MazeCellsState.WALL);
-						continue;
-					}
-					finalMaze[i][j].setState(MazeCellsState.EMPTY);
-					continue;
-					
-				}
 			}
 		}
-		return finalMaze;
+	}
+	private void drawUp(MazeCells cell) {
+		this.finalMaze[cell.getxCoordonate()][cell.getyCoordonate()-1].setState(MazeCellsState.WALL);
+	}
+	private void drawLeft(MazeCells cell) {
+		this.finalMaze[cell.getxCoordonate()-1][cell.getyCoordonate()].setState(MazeCellsState.WALL);
+	}
+	private void drawDown(MazeCells cell) {
+		this.finalMaze[cell.getxCoordonate()][cell.getyCoordonate()+1].setState(MazeCellsState.WALL);
+	}
+	public void drawRight(MazeCells cell) {
+		this.finalMaze[cell.getxCoordonate()+1][cell.getyCoordonate()].setState(MazeCellsState.WALL);
 	}
 	
 	private MazeCells[][] initMaze(MazeCells[][] maze){
