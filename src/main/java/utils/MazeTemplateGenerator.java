@@ -62,9 +62,9 @@ public class MazeTemplateGenerator {
 	
 	private void openWay(MoveSet move) {
 		MoveSet moveInvers = getInverseMove(move);
-		this.mazeTemplate[this.cursor[0]][this.cursor[1]].deleteFreeDirection(move);
+		this.mazeTemplate[this.cursor[0]][this.cursor[1]].removeWall(move);
 		moveCursor(move);
-		this.mazeTemplate[this.cursor[0]][this.cursor[1]].deleteFreeDirection(moveInvers);
+		this.mazeTemplate[this.cursor[0]][this.cursor[1]].removeWall(moveInvers);
 		moveCursor(moveInvers);
 		
 	}

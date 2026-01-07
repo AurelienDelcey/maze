@@ -31,16 +31,16 @@ public class MazeFactory {
 				int x = (i*2)+1;
 				int y = (j*2)+1;
 				
-				if(template[i][j].canMove(MoveSet.UP)) {
+				if(template[i][j].hasWall(MoveSet.UP)) {
 					drawUp(this.finalMaze[x][y]);
 				}
-				if(template[i][j].canMove(MoveSet.DOWN)) {
+				if(template[i][j].hasWall(MoveSet.DOWN)) {
 					drawDown(this.finalMaze[x][y]);
 				}
-				if(template[i][j].canMove(MoveSet.LEFT)) {
+				if(template[i][j].hasWall(MoveSet.LEFT)) {
 					drawLeft(this.finalMaze[x][y]);
 				}
-				if(template[i][j].canMove(MoveSet.RIGHT)) {
+				if(template[i][j].hasWall(MoveSet.RIGHT)) {
 					drawRight(this.finalMaze[x][y]);
 				}
 			}
