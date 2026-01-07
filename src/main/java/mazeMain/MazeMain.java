@@ -11,7 +11,9 @@ public class MazeMain {
 
 	public static void main(String[] args) {
 		
-		MazeFactory factory = new MazeFactory(10);
+		MazeFactory factory = new MazeFactory(5);
+		
+		//factory.create("debug");
 		
 		MazeCells[][] maze = factory.create();
 		
