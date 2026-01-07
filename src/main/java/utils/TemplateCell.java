@@ -3,14 +3,14 @@ package utils;
 
 import model.MoveSet;
 
-public class CellHistory {
+public class TemplateCell {
 	private final int xCoordinate;
 	private final int yCoordinate;
 	private boolean visited;
 	private MoveSet[] freeDirection;
 	
 	
-	public CellHistory(int xCoordinate, int yCoordinate) {
+	public TemplateCell(int xCoordinate, int yCoordinate) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
 		this.visited = false;

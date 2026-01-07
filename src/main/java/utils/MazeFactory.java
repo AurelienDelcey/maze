@@ -23,7 +23,7 @@ public class MazeFactory {
 		return maze;
 	}
 	
-	private MazeCells[][] mapMaze(CellHistory[][] template){
+	private MazeCells[][] mapMaze(TemplateCell[][] template){
 		this.finalMaze = initMaze(this.finalMaze);
 		
 		for (int i = 0; i < template.length; i++) {
