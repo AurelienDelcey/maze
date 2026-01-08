@@ -2,7 +2,9 @@ package utils;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.EnumSet;
 import java.util.Random;
+import java.util.Set;
 
 import model.MoveSet;
 
@@ -26,34 +28,40 @@ public class MazeTemplateGenerator {
 	
 	public TemplateCell[][] createTemplate() {
 		
-		MoveSet[] possibleMove = null;
+		Set<MoveSet> possibleMove = null;
 		MoveSet nextMove = null;
+		
+		
 		initArray();
-		
-		
 		setCursorStart();
-		
 		stack.push(getCurrentCell());
+		
+		
 		while (true) {
+			
 			getCurrentCell().setVisited();
 			possibleMove = searchPossibleMoves();
-			while (possibleMove == null) {
+			
+			while (possibleMove.isEmpty()) {
+				
 				if (stack.isEmpty()) {
 					return this.mazeTemplate;
 				}
+				
 				TemplateCell popCell = this.stack.peek();
+				
 				cursor[0] = popCell.getxCoordinate();
 				cursor[1] = popCell.getyCoordinate();
 				
 				possibleMove = searchPossibleMoves();
-				if(possibleMove==null) {
+				
+				if(possibleMove.isEmpty()) {
 					this.stack.pop();
 				}
 			}
-			nextMove = getRandomMove(possibleMove);
+			nextMove = getRandomMove(possibleMove.toArray(new MoveSet[possibleMove.size()]));
 			openWay(nextMove);
 			moveCursor(nextMove);
-			
 			stack.push(getCurrentCell());
 		}
 	}
@@ -68,9 +76,9 @@ public class MazeTemplateGenerator {
 	}
 	
 	private void initArray() {
-		for (int i = 0; i < this.mazeTemplate.length; i++) {
-			for (int j = 0; j < this.mazeTemplate.length; j++) {
-				this.mazeTemplate[i][j] = new TemplateCell(i,j);
+		for (int col = 0; col < this.mazeTemplate.length; col++) {
+			for (int row = 0; row < this.mazeTemplate.length; row++) {
+				this.mazeTemplate[col][row] = new TemplateCell(col,row);
 			}
 		}
 		
@@ -94,26 +102,30 @@ public class MazeTemplateGenerator {
 		}
 	}
 	
-	private MoveSet[] searchPossibleMoves() {
-		int counter = 0;
-		MoveSet[] possibleMoves = null;
-		if(checkLeft()) {counter++;}
-		if(checkRight()) {counter++;}
-		if(checkUp()) {counter++;}
-		if(checkDown()) {counter++;}
-		if(counter==0) {return null;}
-		possibleMoves = new MoveSet[counter];
-		counter = 0;
-		if(checkLeft()) {possibleMoves[counter]=MoveSet.LEFT;counter++;}
-		if(checkRight()) {possibleMoves[counter]=MoveSet.RIGHT;counter++;}
-		if(checkUp()) {possibleMoves[counter]=MoveSet.UP;counter++;}
-		if(checkDown()) {possibleMoves[counter]=MoveSet.DOWN;counter++;}
-		return possibleMoves;
+	private Set<MoveSet> searchPossibleMoves() {
+		Set<MoveSet>result = EnumSet.noneOf(MoveSet.class);
+		for(MoveSet move:MoveSet.values()) {
+			if(checkMove(move)) {
+				result.add(move);
+			}
+		}
+		return result;
 	}
+	
+	
 	
 	private void setCursorStart() {
 		this.cursor[0] = rand.nextInt(this.size);
 		this.cursor[1] = rand.nextInt(this.size);
+	}
+	
+	private boolean checkMove(MoveSet move) {
+		return switch(move) {
+			case UP -> checkUp();
+			case DOWN -> checkDown();
+			case RIGHT -> checkRight();
+			case LEFT -> checkLeft();
+		};
 	}
 	
 	private boolean checkLeft() {
