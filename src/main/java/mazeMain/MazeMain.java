@@ -12,7 +12,7 @@ public class MazeMain {
 		
 		MazeCells[][] maze=null;
 		try {
-			MazeFactory factory = new MazeFactory(22);
+			MazeFactory factory = new MazeFactory(21);
 			maze = factory.create();
 		} catch (IllegalArgumentException e) {
 			System.out.println("ERROR: " + e.getMessage());

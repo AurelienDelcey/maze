@@ -50,10 +50,14 @@ public class MazeFactory {
 			}
 		}
 		finalizeMaze();
+		initStartAndGoal();
 		return finalMaze;
 	}
 	
-	
+	private void initStartAndGoal() {
+		this.finalMaze[1][1].setState(MazeCellsState.GOAL);
+		this.finalMaze[this.size-2][this.size-2].setState(MazeCellsState.START);
+	}
 	
 	private void finalizeMaze() {
 		for (int col = 0; col < finalMaze.length; col++) {
