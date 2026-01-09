@@ -12,10 +12,15 @@ public class MazeFactory {
 	
 	
 	
-	public MazeFactory(int size) {
+	public MazeFactory(int size) throws IllegalArgumentException{
+		if(size%2 == 0 ) {
+			throw new IllegalArgumentException(
+					"Invalid maze size: must be odd to preserve structure"
+					);
+		}
 		this.size = size;
-		this.mazeGen = new MazeTemplateGenerator(size);
-		finalMaze = new MazeCells[(this.size*2)+1][(this.size*2)+1];
+		this.mazeGen = new MazeTemplateGenerator((this.size-1)/2);
+		finalMaze = new MazeCells[this.size][this.size];
 	}
 
 	public MazeCells[][] create() {
