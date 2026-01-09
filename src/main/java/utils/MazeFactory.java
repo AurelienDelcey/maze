@@ -19,8 +19,7 @@ public class MazeFactory {
 	}
 
 	public MazeCells[][] create() {
-		MazeCells[][] maze = mapMaze(mazeGen.createTemplate());
-		return maze;
+		return mapMaze(mazeGen.createTemplate());
 	}
 	
 	private MazeCells[][] mapMaze(TemplateCell[][] template){
@@ -28,20 +27,20 @@ public class MazeFactory {
 		
 		for (int i = 0; i < template.length; i++) {
 			for (int j = 0; j < template.length; j++) {
-				int x = (i*2)+1;
-				int y = (j*2)+1;
+				int col = (i*2)+1;
+				int row = (j*2)+1;
 				
 				if(template[i][j].hasWall(MoveSet.UP)) {
-					drawUp(this.finalMaze[x][y]);
+					drawUp(this.finalMaze[col][row]);
 				}
 				if(template[i][j].hasWall(MoveSet.DOWN)) {
-					drawDown(this.finalMaze[x][y]);
+					drawDown(this.finalMaze[col][row]);
 				}
 				if(template[i][j].hasWall(MoveSet.LEFT)) {
-					drawLeft(this.finalMaze[x][y]);
+					drawLeft(this.finalMaze[col][row]);
 				}
 				if(template[i][j].hasWall(MoveSet.RIGHT)) {
-					drawRight(this.finalMaze[x][y]);
+					drawRight(this.finalMaze[col][row]);
 				}
 			}
 		}
@@ -52,14 +51,14 @@ public class MazeFactory {
 	
 	
 	private void finalizeMaze() {
-		for (int i = 0; i < finalMaze.length; i++) {
-			for (int j = 0; j < finalMaze.length; j++) {
-				if(i==0 || i==finalMaze.length-1 || j==0 || j==finalMaze.length-1 ) {
-					finalMaze[i][j].setState(MazeCellsState.WALL);
+		for (int col = 0; col < finalMaze.length; col++) {
+			for (int row = 0; row < finalMaze.length; row++) {
+				if(col==0 || col==finalMaze.length-1 || row==0 || row==finalMaze.length-1 ) {
+					finalMaze[col][row].setState(MazeCellsState.WALL);
 					continue;
 				}
-				if(i%2==0 && j%2==0) {
-					finalMaze[i][j].setState(MazeCellsState.WALL);
+				if(col%2==0 && row%2==0) {
+					finalMaze[col][row].setState(MazeCellsState.WALL);
 					continue;
 				}
 			}
@@ -74,14 +73,14 @@ public class MazeFactory {
 	private void drawDown(MazeCells cell) {
 		this.finalMaze[cell.getxCoordonate()][cell.getyCoordonate()+1].setState(MazeCellsState.WALL);
 	}
-	public void drawRight(MazeCells cell) {
+	private void drawRight(MazeCells cell) {
 		this.finalMaze[cell.getxCoordonate()+1][cell.getyCoordonate()].setState(MazeCellsState.WALL);
 	}
 	
 	private MazeCells[][] initMaze(MazeCells[][] maze){
-		for (int i = 0; i < maze.length; i++) {
-			for (int j = 0; j < maze.length; j++) {
-				maze[i][j] = new MazeCells(i,j);
+		for (int col = 0; col < maze.length; col++) {
+			for (int row = 0; row < maze.length; row++) {
+				maze[col][row] = new MazeCells(col,row);
 			}
 		}
 		return maze;

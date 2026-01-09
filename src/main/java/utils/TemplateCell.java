@@ -31,10 +31,8 @@ public class TemplateCell {
 	}
 
 
-	public void removeWall(MoveSet toDelete) {
-		if(walls.contains(toDelete)) {
-			walls.remove(toDelete);
-		}
+	public boolean removeWall(MoveSet toDelete) {
+		return walls.remove(toDelete);
 	}
 	public int countWalls() {
 		return walls.size();
@@ -56,6 +54,6 @@ public class TemplateCell {
 
 
 	public Set<MoveSet> getWalls() {
-		return walls;
+		return EnumSet.copyOf(this.walls);
 	}
 }

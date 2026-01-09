@@ -50,8 +50,7 @@ public class MazeTemplateGenerator {
 				
 				TemplateCell popCell = this.stack.peek();
 				
-				cursor[0] = popCell.getxCoordinate();
-				cursor[1] = popCell.getyCoordinate();
+				setCursor(popCell.getxCoordinate(),popCell.getyCoordinate());
 				
 				possibleMove = searchPossibleMoves();
 				
@@ -82,6 +81,10 @@ public class MazeTemplateGenerator {
 			}
 		}
 		
+	}
+	private void setCursor(int x, int y) {
+		cursor[0] = x;
+		cursor[1] = y;
 	}
 	
 	private MoveSet getInverseMove(MoveSet move) {
