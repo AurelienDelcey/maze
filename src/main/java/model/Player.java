@@ -1,17 +1,19 @@
 package model;
 
+import java.util.EnumSet;
+
 public class Player {
 	
 	private final String name;
 	private int xCoordonate;
 	private int yCoordonate;
-	private final MoveSet[] moveSet;
+	private final EnumSet<MoveSet> moveSet;
 
 	public Player(String name, int xCoordonate, int yCoordonate, MoveSet[] moveSet) {
 		this.name = name;
 		this.xCoordonate = xCoordonate;
 		this.yCoordonate = yCoordonate;
-		this.moveSet = moveSet;
+		this.moveSet = EnumSet.allOf(MoveSet.class);
 	}
 
 	public int getxCoordonate() {
@@ -34,8 +36,8 @@ public class Player {
 		return name;
 	}
 
-	public MoveSet[] getMoveSet() {
-		return moveSet;
+	public EnumSet<MoveSet> getMoveSet() {
+		return EnumSet.copyOf(this.moveSet);
 	}
 
 }
