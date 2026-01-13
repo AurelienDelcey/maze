@@ -9,7 +9,7 @@ public class Player {
 	private int yCoordonate;
 	private final EnumSet<MoveSet> moveSet;
 
-	public Player(String name, int xCoordonate, int yCoordonate, MoveSet[] moveSet) {
+	public Player(String name, int xCoordonate, int yCoordonate) {
 		this.name = name;
 		this.xCoordonate = xCoordonate;
 		this.yCoordonate = yCoordonate;

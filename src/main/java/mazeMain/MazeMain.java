@@ -10,7 +10,7 @@ public class MazeMain {
 
 	public static void main(String[] args) {
 		
-		MazeCells[][] maze=null;
+		/*MazeCells[][] maze=null;
 		try {
 			MazeFactory factory = new MazeFactory(21);
 			maze = factory.create();
@@ -29,17 +29,9 @@ public class MazeMain {
 					}
 				}
 				System.out.println("|");
-			}
-			/*try{
-				launch(ui.ViewManager.class);
-			}catch(Exception e) {
-				System.out.println("main class ERROR: " + e.getMessage());
-				System.out.println(e.getStackTrace());
 			}*/
-		}
-		
-		
 
+		launch(ui.ViewManager.class);
+		
 	}
-
 }
