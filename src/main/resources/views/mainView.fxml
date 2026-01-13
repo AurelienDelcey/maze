@@ -34,11 +34,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="generalLayout" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <center>
@@ -60,8 +64,19 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button focusTraversable="false" mnemonicParsing="false" onAction="#onClickReset" text="RESEST" />
-            <Button focusTraversable="false" mnemonicParsing="false" text="SAVE &amp; QUIT" />
+            <Button focusTraversable="false" mnemonicParsing="false" onAction="#onClickReset" prefHeight="32.0" prefWidth="114.0" text="RESET" />
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox prefHeight="100.0" prefWidth="206.0">
+               <children>
+                  <Label fx:id="victoryLabel" contentDisplay="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="210.0" text="VICTORY!!" textAlignment="CENTER">
+                     <font>
+                        <Font size="43.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button focusTraversable="false" mnemonicParsing="false" prefHeight="31.0" prefWidth="103.0" text="SAVE &amp; QUIT" />
          </children>
       </HBox>
    </top>

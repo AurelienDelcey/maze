@@ -7,11 +7,13 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import mazeLogic.GameState;
+import mazeLogic.GeneralGameStateManager;
 import mazeLogic.Rules;
 import model.MazeCells;
 import model.MazeCellsState;
@@ -23,6 +25,7 @@ public class Controller {
 	
 	private static final Color WALL_COLOR = Color.CHOCOLATE;
 	private static final Color PATH_COLOR = Color.BEIGE;
+	private GeneralGameStateManager state;
 	private static final Color PLAYER_COLOR = Color.DARKGOLDENROD;
 	private  Player player;
 	private Canvas[][] renderCanvas;
@@ -41,6 +44,45 @@ public class Controller {
 	@FXML
 	BorderPane generalLayout;
 	
+	@FXML
+	Label victoryLabel;
+	
+	private final EventHandler<KeyEvent> commandHandler = e->{
+		switch(e.getCode()) {
+		case DOWN ->{
+				if(this.rules.applyMove(MoveSet.DOWN)) {
+					updateRender();
+					savePlayerPosition();
+				}
+				e.consume();
+			}
+		case UP ->{
+			if(this.rules.applyMove(MoveSet.UP)) {
+				updateRender();
+				savePlayerPosition();
+			}
+			e.consume();
+		}
+		case LEFT ->{
+			if(this.rules.applyMove(MoveSet.LEFT)) {
+				updateRender();
+				savePlayerPosition();
+			}
+			e.consume();
+		}
+		case RIGHT ->{
+			if(this.rules.applyMove(MoveSet.RIGHT)) {
+				updateRender();
+				savePlayerPosition();
+			}
+			e.consume();
+		}
+		default -> {}
+		};
+		if(this.state.getGlobalState() == GameState.VICTORY) {
+			drawVictory();
+		}
+	};
 	
 	@FXML
 	public void initialize() {
@@ -123,46 +165,24 @@ public class Controller {
 	}
 	
 	public void setBindingOnScene() {
-		this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,e->{
-			switch(e.getCode()) {
-			case DOWN ->{
-					if(this.rules.applyMove(MoveSet.DOWN)) {
-						updateRender();
-						savePlayerPosition();
-					}
-					e.consume();
-				}
-			case UP ->{
-				if(this.rules.applyMove(MoveSet.UP)) {
-					updateRender();
-					savePlayerPosition();
-				}
-				e.consume();
-			}
-			case LEFT ->{
-				if(this.rules.applyMove(MoveSet.LEFT)) {
-					updateRender();
-					savePlayerPosition();
-				}
-				e.consume();
-			}
-			case RIGHT ->{
-				if(this.rules.applyMove(MoveSet.RIGHT)) {
-					updateRender();
-					savePlayerPosition();
-				}
-				e.consume();
-			}
-			default -> {}
-			};
-		});
+		this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,this.commandHandler);
+	}
+	
+	private void debindingSceneInput() {
+		this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.commandHandler);
+	}
+	
+	private void drawVictory() {
+		victoryLabel.setOpacity(1);
+		debindingSceneInput();
 	}
 
-	public void controllerInitData(MazeCells[][] maze, Rules rules, Player player ){
+	public void controllerInitData(MazeCells[][] maze, Rules rules, Player player, GeneralGameStateManager state){
 		this.maze = maze;
 		this.rules = rules;
 		this.renderCanvas = new Canvas[maze.length][maze[0].length];
 		this.player = player;
+		this.state = state;
 		savePlayerPosition();
 		
 		/*this.playerPositionX = new SimpleIntegerProperty(this.player.getxCoordonate());

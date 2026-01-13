@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import mazeLogic.GameState;
+import mazeLogic.GeneralGameStateManager;
 import mazeLogic.Rules;
 import model.MazeCells;
 import model.Player;
@@ -22,7 +23,7 @@ public class ViewManager extends Application{
 	private MazeCells[][] maze;
 	private Rules rules;
 	private Player player;
-	private GameState gameState;
+	private GeneralGameStateManager gameState;
 	
 	
 
@@ -31,7 +32,7 @@ public class ViewManager extends Application{
 		MazeFactory factory = new MazeFactory(21);
 		this.maze = factory.create();
 		this.player = new Player("player", this.maze.length-2, this.maze.length-2);
-		this.gameState = GameState.IN_GAME;
+		this.gameState = new GeneralGameStateManager();
 		this.rules = new Rules(maze, player, gameState);
 	}
 
@@ -45,7 +46,7 @@ public class ViewManager extends Application{
 		Parent mainView = loader.load();
 		
 		Controller controller = loader.getController();
-		controller.controllerInitData(this.maze, this.rules, this.player);
+		controller.controllerInitData(this.maze, this.rules, this.player, this.gameState);
 		
 		Scene scene = new Scene(mainView);
 		controller.setBindingOnScene();

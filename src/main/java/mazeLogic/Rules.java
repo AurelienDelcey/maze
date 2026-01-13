@@ -10,10 +10,10 @@ public class Rules {
 	
 	private final MazeCells[][] maze;
 	private final Player player;
-	private GameState state;
+	private final GeneralGameStateManager state;
 	
 	
-	public Rules(MazeCells[][] maze, Player player, GameState state) {
+	public Rules(MazeCells[][] maze, Player player, GeneralGameStateManager state) {
 		this.maze = maze;
 		this.player = player;
 		this.state = state;
@@ -22,7 +22,7 @@ public class Rules {
 	public boolean applyMove(MoveSet move) {
 		if(movementAuthorization(move)) {
 			movePlayer(move);
-			checkVictory();
+			this.state.setGlobalState(checkVictory());
 			return true;
 		}
 		return false;
