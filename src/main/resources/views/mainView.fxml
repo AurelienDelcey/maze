@@ -40,7 +40,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<BorderPane fx:id="generalLayout" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <center>
       <GridPane fx:id="mazeLayout" alignment="CENTER" gridLinesVisible="true" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -60,8 +60,8 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#onClickReset" text="RESEST" />
-            <Button mnemonicParsing="false" text="SAVE &amp; QUIT" />
+            <Button focusTraversable="false" mnemonicParsing="false" onAction="#onClickReset" text="RESEST" />
+            <Button focusTraversable="false" mnemonicParsing="false" text="SAVE &amp; QUIT" />
          </children>
       </HBox>
    </top>

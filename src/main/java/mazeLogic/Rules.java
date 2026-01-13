@@ -10,16 +10,19 @@ public class Rules {
 	
 	private final MazeCells[][] maze;
 	private final Player player;
+	private GameState state;
 	
 	
 	public Rules(MazeCells[][] maze, Player player, GameState state) {
 		this.maze = maze;
 		this.player = player;
+		this.state = state;
 	}
 	
 	public boolean applyMove(MoveSet move) {
 		if(movementAuthorization(move)) {
 			movePlayer(move);
+			checkVictory();
 			return true;
 		}
 		return false;

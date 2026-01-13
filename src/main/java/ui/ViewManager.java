@@ -45,9 +45,10 @@ public class ViewManager extends Application{
 		Parent mainView = loader.load();
 		
 		Controller controller = loader.getController();
-		controller.controllerInitData(this.maze, this.rules);
+		controller.controllerInitData(this.maze, this.rules, this.player);
 		
 		Scene scene = new Scene(mainView);
+		controller.setBindingOnScene();
 		stage.setScene(scene);
 		stage.show();
 	}
