@@ -1,9 +1,6 @@
 package controller;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,7 +16,6 @@ import model.MazeCells;
 import model.MazeCellsState;
 import model.MoveSet;
 import model.Player;
-import utils.MazeFactory;
 
 public class Controller {
 	
@@ -35,8 +31,6 @@ public class Controller {
 	private int margin = 5;
 	private int previousPositionX;
 	private int previousPositionY;
-	/*private IntegerProperty playerPositionX;
-	private IntegerProperty playerPositionY;*/
 	
 	@FXML
 	GridPane mazeLayout;
@@ -184,19 +178,6 @@ public class Controller {
 		this.player = player;
 		this.state = state;
 		savePlayerPosition();
-		
-		/*this.playerPositionX = new SimpleIntegerProperty(this.player.getxCoordonate());
-		this.playerPositionY = new SimpleIntegerProperty(this.player.getyCoordonate());
-		this.playerPositionX.addListener(i->{
-			redrawPreviousPositionCanvas();
-			redrawPlayerPositionCanvas();
-			savePlayerPosition();
-		});
-		this.playerPositionY.addListener(i->{
-			redrawPreviousPositionCanvas();
-			redrawPlayerPositionCanvas();
-			savePlayerPosition();
-		});*/
 		initMazeRender();
 	}
 	
