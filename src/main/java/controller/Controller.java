@@ -2,35 +2,22 @@ package controller;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import mazeLogic.GameState;
 import mazeLogic.GeneralGameStateManager;
 import mazeLogic.Rules;
-import model.MazeCells;
-import model.MazeCellsState;
 import model.MoveSet;
-import model.Player;
 
 public class Controller {
 	
-	private static final Color WALL_COLOR = Color.CHOCOLATE;
-	private static final Color PATH_COLOR = Color.BEIGE;
+	
 	private GeneralGameStateManager state;
-	private static final Color PLAYER_COLOR = Color.DARKGOLDENROD;
-	private  Player player;
-	private Canvas[][] renderCanvas;
-	private  MazeCells[][] maze;
 	private Rules rules;
-	private int cellSize = 20;
-	private int margin = 5;
-	private int previousPositionX;
-	private int previousPositionY;
+	private MazeRenderer renderer;
+	private EventHandler<KeyEvent> commandHandler;
 	
 	@FXML
 	GridPane mazeLayout;
@@ -41,7 +28,6 @@ public class Controller {
 	@FXML
 	Label victoryLabel;
 	
-	private EventHandler<KeyEvent> commandHandler;
 	
 	@FXML
 	public void onClickReset() {
@@ -53,11 +39,10 @@ public class Controller {
 		
 	}
 	
-	public void controllerInitData(MazeCells[][] maze, Rules rules, Player player, GeneralGameStateManager state){
-		this.maze = maze;
+	public void controllerInitData(Rules rules, GeneralGameStateManager state, MazeRenderer renderer){
+		
 		this.rules = rules;
-		this.renderCanvas = new Canvas[maze.length][maze[0].length];
-		this.player = player;
+		this.renderer = renderer;
 		this.state = state;
 		this.commandHandler = e->{
 			switch(e.getCode()) {
@@ -71,28 +56,8 @@ public class Controller {
 				drawVictory();
 			}
 		};
-		savePlayerPosition();
-		initMazeRender();
-	}
-
-	public void initMazeRender() {
-		for (int i = 0; i < this.maze.length; i++) {
-			for (int j = 0; j < this.maze[i].length; j++) {
-				Canvas mazePart= new Canvas(this.cellSize,this.cellSize) ;
-				GraphicsContext gc= mazePart.getGraphicsContext2D();
-				if(this.maze[i][j].getState()== MazeCellsState.WALL) {
-					gc.setFill(WALL_COLOR);
-				}else {
-					gc.setFill(PATH_COLOR);
-				}
-				gc.fillRect(0,0,this.cellSize,this.cellSize);
-				
-				drawStartAndGoal(i, j, gc);
-				this.mazeLayout.add(mazePart,i,j);
-				this.renderCanvas[i][j] = mazePart;
-			}
-		}
-		drawPlayer();
+		renderer.savePlayerPosition();
+		renderer.initMazeRender(this.mazeLayout);
 	}
 	
 	public void setBindingOnScene(boolean state) {
@@ -102,56 +67,6 @@ public class Controller {
 			this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.commandHandler);		
 		}
 	}
-
-	private void updateRender() {
-		redrawPlayerPositionCanvas();
-		redrawPreviousPositionCanvas();
-	}
-	
-	private void redrawPlayerPositionCanvas() {
-		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, cellSize, cellSize);
-		gc.setFill(PATH_COLOR);
-		gc.fillRect(0,0,this.cellSize,this.cellSize);
-		drawPlayer();
-		
-	}
-	
-	private void redrawPreviousPositionCanvas() {
-		Canvas canvas = this.renderCanvas[this.previousPositionX][this.previousPositionY];
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, cellSize, cellSize);
-		gc.setFill(PATH_COLOR);
-		gc.fillRect(0,0,this.cellSize,this.cellSize);
-		drawStartAndGoal(this.previousPositionX,this.previousPositionY,gc);
-	}
-	
-	private void drawPlayer() {
-		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setFill(PLAYER_COLOR);
-		gc.fillOval(this.margin/2, this.margin/2, this.cellSize-this.margin, this.cellSize-this.margin);
-	}
-	
-	private void drawStartAndGoal(int x, int y, GraphicsContext gc) {
-		switch(this.maze[x][y].getState()){
-			case GOAL ->{
-				gc.setFill(Color.BLUE);
-				gc.fillOval(this.margin/2, this.margin/2, this.cellSize-this.margin, this.cellSize-this.margin);
-			}
-			case START ->{
-				gc.setFill(Color.GREEN);
-				gc.fillOval(this.margin/2, this.margin/2, this.cellSize-this.margin, this.cellSize-this.margin);	
-			}
-		default -> {}
-		};
-	}
-	
-	private void savePlayerPosition() {
-		this.previousPositionX = this.player.getxCoordonate();
-		this.previousPositionY = this.player.getyCoordonate();
-	}
 	
 	private void drawVictory() {
 		victoryLabel.setOpacity(1);
@@ -160,8 +75,8 @@ public class Controller {
 
 	private void movePlayer(MoveSet move) {
 		if(this.rules.applyMove(move)) {
-			updateRender();
-			savePlayerPosition();
+			renderer.updateRender();
+			renderer.savePlayerPosition();
 		}
 	}
 }

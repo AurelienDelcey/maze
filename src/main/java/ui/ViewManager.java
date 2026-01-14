@@ -3,6 +3,7 @@ package ui;
 import java.net.URL;
 
 import controller.Controller;
+import controller.MazeRenderer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,7 @@ public class ViewManager extends Application{
 	private Rules rules;
 	private Player player;
 	private GeneralGameStateManager gameState;
+	private MazeRenderer renderer;
 	
 	
 
@@ -30,6 +32,7 @@ public class ViewManager extends Application{
 		this.player = new Player("player", this.maze.length-2, this.maze.length-2);
 		this.gameState = new GeneralGameStateManager();
 		this.rules = new Rules(maze, player, gameState);
+		this.renderer = new MazeRenderer(this.player, this.maze);
 	}
 
 
@@ -42,7 +45,7 @@ public class ViewManager extends Application{
 		Parent mainView = loader.load();
 		
 		Controller controller = loader.getController();
-		controller.controllerInitData(this.maze, this.rules, this.player, this.gameState);
+		controller.controllerInitData(this.rules, this.gameState, this.renderer);
 		
 		Scene scene = new Scene(mainView);
 		controller.setBindingOnScene(true);
