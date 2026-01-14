@@ -14,10 +14,10 @@ import model.MoveSet;
 public class Controller {
 	
 	
-	private GeneralGameStateManager state;
+	private GeneralGameStateManager gameStateManager;
 	private Rules rules;
-	private MazeRenderer renderer;
-	private EventHandler<KeyEvent> commandHandler;
+	private MazeRenderer mazeRenderer;
+	private EventHandler<KeyEvent> inputHandler;
 	
 	@FXML
 	GridPane mazeLayout;
@@ -39,12 +39,12 @@ public class Controller {
 		
 	}
 	
-	public void controllerInitData(Rules rules, GeneralGameStateManager state, MazeRenderer renderer){
+	public void initializeGame(Rules rules, GeneralGameStateManager state, MazeRenderer renderer){
 		
 		this.rules = rules;
-		this.renderer = renderer;
-		this.state = state;
-		this.commandHandler = e->{
+		this.mazeRenderer = renderer;
+		this.gameStateManager = state;
+		this.inputHandler = e->{
 			switch(e.getCode()) {
 			case DOWN ->{movePlayer(MoveSet.DOWN);e.consume();}
 			case UP ->{movePlayer(MoveSet.UP);e.consume();}
@@ -52,31 +52,31 @@ public class Controller {
 			case RIGHT ->{movePlayer(MoveSet.RIGHT);e.consume();}
 			default -> {}
 			};
-			if(this.state.getGlobalState() == GameState.VICTORY) {
+			if(this.gameStateManager.getGlobalState() == GameState.VICTORY) {
 				drawVictory();
 			}
 		};
-		renderer.savePlayerPosition();
-		renderer.initMazeRender(this.mazeLayout);
+		renderer.storePreviousPlayerPosition();
+		renderer.renderMaze(this.mazeLayout);
 	}
 	
-	public void setBindingOnScene(boolean state) {
+	public void enableInput(boolean state) {
 		if(state) {
-			this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,this.commandHandler);			
+			this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,this.inputHandler);			
 		}else {
-			this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.commandHandler);		
+			this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.inputHandler);		
 		}
 	}
 	
 	private void drawVictory() {
 		victoryLabel.setOpacity(1);
-		setBindingOnScene(false);
+		enableInput(false);
 	}
 
 	private void movePlayer(MoveSet move) {
 		if(this.rules.applyMove(move)) {
-			renderer.updateRender();
-			renderer.savePlayerPosition();
+			mazeRenderer.renderPlayerMove();
+			mazeRenderer.storePreviousPlayerPosition();
 		}
 	}
 }

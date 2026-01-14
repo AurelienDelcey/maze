@@ -29,7 +29,7 @@ public class MazeRenderer {
 		this.previousPositionY = 0;
 	}
 
-	public void initMazeRender(GridPane mazeLayout) {
+	public void renderMaze(GridPane mazeLayout) {
 		for (int i = 0; i < this.maze.length; i++) {
 			for (int j = 0; j < this.maze[i].length; j++) {
 				Canvas mazePart= new Canvas(CELL_SIZE, CELL_SIZE) ;
@@ -49,17 +49,17 @@ public class MazeRenderer {
 		drawPlayer();
 	}
 	
-	public void updateRender() {
-		redrawPlayerPositionCanvas();
-		redrawPreviousPositionCanvas();
+	public void renderPlayerMove() {
+		renderPlayerCell();
+		restorePreviousCell();
 	}
 
-	public void savePlayerPosition() {
+	public void storePreviousPlayerPosition() {
 		this.previousPositionX = this.player.getxCoordonate();
 		this.previousPositionY = this.player.getyCoordonate();
 	}
 
-	private void redrawPlayerPositionCanvas() {
+	private void renderPlayerCell() {
 		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CELL_SIZE, CELL_SIZE);
@@ -69,6 +69,15 @@ public class MazeRenderer {
 		
 	}
 
+	private void restorePreviousCell() {
+		Canvas canvas = this.renderCanvas[this.previousPositionX][this.previousPositionY];
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, CELL_SIZE, CELL_SIZE);
+		gc.setFill(PATH_COLOR);
+		gc.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
+		drawStartAndGoal(this.previousPositionX,this.previousPositionY,gc);
+	}
+	
 	private void drawStartAndGoal(int x, int y, GraphicsContext gc) {
 		switch(this.maze[x][y].getState()){
 			case GOAL ->{
@@ -82,16 +91,7 @@ public class MazeRenderer {
 		default -> {}
 		};
 	}
-	
-	private void redrawPreviousPositionCanvas() {
-		Canvas canvas = this.renderCanvas[this.previousPositionX][this.previousPositionY];
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, CELL_SIZE, CELL_SIZE);
-		gc.setFill(PATH_COLOR);
-		gc.fillRect(0, 0, CELL_SIZE, CELL_SIZE);
-		drawStartAndGoal(this.previousPositionX,this.previousPositionY,gc);
-	}
-	
+
 	private void drawPlayer() {
 		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
 		GraphicsContext gc = canvas.getGraphicsContext2D();

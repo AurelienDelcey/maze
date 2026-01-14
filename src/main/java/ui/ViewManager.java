@@ -20,8 +20,8 @@ public class ViewManager extends Application{
 	private MazeCells[][] maze;
 	private Rules rules;
 	private Player player;
-	private GeneralGameStateManager gameState;
-	private MazeRenderer renderer;
+	private GeneralGameStateManager gameStateManager;
+	private MazeRenderer mazeRenderer;
 	
 	
 
@@ -30,9 +30,9 @@ public class ViewManager extends Application{
 		MazeFactory factory = new MazeFactory(21);
 		this.maze = factory.create();
 		this.player = new Player("player", this.maze.length-2, this.maze.length-2);
-		this.gameState = new GeneralGameStateManager();
-		this.rules = new Rules(maze, player, gameState);
-		this.renderer = new MazeRenderer(this.player, this.maze);
+		this.gameStateManager = new GeneralGameStateManager();
+		this.rules = new Rules(maze, player, gameStateManager);
+		this.mazeRenderer = new MazeRenderer(this.player, this.maze);
 	}
 
 
@@ -45,10 +45,10 @@ public class ViewManager extends Application{
 		Parent mainView = loader.load();
 		
 		Controller controller = loader.getController();
-		controller.controllerInitData(this.rules, this.gameState, this.renderer);
+		controller.initializeGame(this.rules, this.gameStateManager, this.mazeRenderer);
 		
 		Scene scene = new Scene(mainView);
-		controller.setBindingOnScene(true);
+		controller.enableInput(true);
 		stage.setScene(scene);
 		stage.show();
 	}
