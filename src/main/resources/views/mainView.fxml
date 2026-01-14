@@ -44,7 +44,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="generalLayout" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="524.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+
+<BorderPane fx:id="generalLayout" focusTraversable="true" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <center>
       <GridPane fx:id="mazeLayout" alignment="CENTER" gridLinesVisible="true" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -62,13 +63,13 @@
       </GridPane>
    </center>
    <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox BorderPane.alignment="CENTER">
          <children>
             <Button focusTraversable="false" mnemonicParsing="false" onAction="#onClickReset" prefHeight="32.0" prefWidth="114.0" text="RESET" />
             <Region HBox.hgrow="ALWAYS" />
-            <VBox prefHeight="100.0" prefWidth="206.0">
+            <VBox>
                <children>
-                  <Label fx:id="victoryLabel" contentDisplay="CENTER" opacity="0.0" prefHeight="100.0" prefWidth="210.0" text="VICTORY!!" textAlignment="CENTER">
+                  <Label fx:id="victoryLabel" contentDisplay="CENTER" opacity="0.0" text="VICTORY!!" textAlignment="CENTER">
                      <font>
                         <Font size="43.0" />
                      </font>
