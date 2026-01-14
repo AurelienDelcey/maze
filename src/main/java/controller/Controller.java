@@ -41,53 +41,40 @@ public class Controller {
 	@FXML
 	Label victoryLabel;
 	
-	private final EventHandler<KeyEvent> commandHandler = e->{
-		switch(e.getCode()) {
-		case DOWN ->{
-				if(this.rules.applyMove(MoveSet.DOWN)) {
-					updateRender();
-					savePlayerPosition();
-				}
-				e.consume();
-			}
-		case UP ->{
-			if(this.rules.applyMove(MoveSet.UP)) {
-				updateRender();
-				savePlayerPosition();
-			}
-			e.consume();
-		}
-		case LEFT ->{
-			if(this.rules.applyMove(MoveSet.LEFT)) {
-				updateRender();
-				savePlayerPosition();
-			}
-			e.consume();
-		}
-		case RIGHT ->{
-			if(this.rules.applyMove(MoveSet.RIGHT)) {
-				updateRender();
-				savePlayerPosition();
-			}
-			e.consume();
-		}
-		default -> {}
-		};
-		if(this.state.getGlobalState() == GameState.VICTORY) {
-			drawVictory();
-		}
-	};
-	
-	@FXML
-	public void initialize() {
-		
-	}
+	private EventHandler<KeyEvent> commandHandler;
 	
 	@FXML
 	public void onClickReset() {
 		System.out.println("reset!");
 	}
+
+	@FXML
+	public void initialize() {
+		
+	}
 	
+	public void controllerInitData(MazeCells[][] maze, Rules rules, Player player, GeneralGameStateManager state){
+		this.maze = maze;
+		this.rules = rules;
+		this.renderCanvas = new Canvas[maze.length][maze[0].length];
+		this.player = player;
+		this.state = state;
+		this.commandHandler = e->{
+			switch(e.getCode()) {
+			case DOWN ->{movePlayer(MoveSet.DOWN);e.consume();}
+			case UP ->{movePlayer(MoveSet.UP);e.consume();}
+			case LEFT ->{movePlayer(MoveSet.LEFT);e.consume();}
+			case RIGHT ->{movePlayer(MoveSet.RIGHT);e.consume();}
+			default -> {}
+			};
+			if(this.state.getGlobalState() == GameState.VICTORY) {
+				drawVictory();
+			}
+		};
+		savePlayerPosition();
+		initMazeRender();
+	}
+
 	public void initMazeRender() {
 		for (int i = 0; i < this.maze.length; i++) {
 			for (int j = 0; j < this.maze[i].length; j++) {
@@ -108,6 +95,14 @@ public class Controller {
 		drawPlayer();
 	}
 	
+	public void setBindingOnScene(boolean state) {
+		if(state) {
+			this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,this.commandHandler);			
+		}else {
+			this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.commandHandler);		
+		}
+	}
+
 	private void updateRender() {
 		redrawPlayerPositionCanvas();
 		redrawPreviousPositionCanvas();
@@ -158,27 +153,15 @@ public class Controller {
 		this.previousPositionY = this.player.getyCoordonate();
 	}
 	
-	public void setBindingOnScene() {
-		this.generalLayout.getScene().addEventHandler(KeyEvent.KEY_PRESSED,this.commandHandler);
-	}
-	
-	private void debindingSceneInput() {
-		this.generalLayout.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this.commandHandler);
-	}
-	
 	private void drawVictory() {
 		victoryLabel.setOpacity(1);
-		debindingSceneInput();
+		setBindingOnScene(false);
 	}
 
-	public void controllerInitData(MazeCells[][] maze, Rules rules, Player player, GeneralGameStateManager state){
-		this.maze = maze;
-		this.rules = rules;
-		this.renderCanvas = new Canvas[maze.length][maze[0].length];
-		this.player = player;
-		this.state = state;
-		savePlayerPosition();
-		initMazeRender();
+	private void movePlayer(MoveSet move) {
+		if(this.rules.applyMove(move)) {
+			updateRender();
+			savePlayerPosition();
+		}
 	}
-	
 }

@@ -45,7 +45,7 @@ public class ViewManager extends Application{
 		controller.controllerInitData(this.maze, this.rules, this.player, this.gameState);
 		
 		Scene scene = new Scene(mainView);
-		controller.setBindingOnScene();
+		controller.setBindingOnScene(true);
 		stage.setScene(scene);
 		stage.show();
 	}
