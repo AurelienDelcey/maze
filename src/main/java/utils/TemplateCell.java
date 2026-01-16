@@ -53,7 +53,7 @@ public class TemplateCell {
 	}
 
 
-	public Set<MoveSet> getWalls() {
+	public EnumSet<MoveSet> getWalls() {
 		return EnumSet.copyOf(this.walls);
 	}
 }

@@ -9,7 +9,6 @@ public class MazeCells {
 	private  MazeCellsState state;
 	
 	public MazeCells(int xCoordonate, int yCoordonate) {
-		super();
 		this.xCoordonate = xCoordonate;
 		this.yCoordonate = yCoordonate;
 		this.state = MazeCellsState.EMPTY;
