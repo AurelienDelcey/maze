@@ -1,8 +1,6 @@
 package utils;
 
 import model.MazeCells;
-import model.MazeCellsState;
-import model.MoveSet;
 
 public class MazeFactory {
 	
