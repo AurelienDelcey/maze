@@ -9,33 +9,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import mazeLogic.GeneralGameStateManager;
+import mazeLogic.GameContext;
 import mazeLogic.Rules;
-import model.MazeCells;
-import model.Player;
-import utils.MazeFactory;
 
 public class ViewManager extends Application{
 	
-	private MazeCells[][] maze;
 	private Rules rules;
-	private Player player;
-	private GeneralGameStateManager gameStateManager;
+	private GameContext context;
 	private MazeRenderer mazeRenderer;
 	
 	
 
 	@Override
 	public void init() throws Exception {
-		MazeFactory factory = new MazeFactory(21);
-		this.maze = factory.create();
-		this.player = new Player("player", this.maze.length-2, this.maze.length-2);
-		this.gameStateManager = new GeneralGameStateManager();
-		this.rules = new Rules(maze, player, gameStateManager);
-		this.mazeRenderer = new MazeRenderer(this.player, this.maze);
+		this.context = new GameContext();
+		this.rules = new Rules(context);
+		this.mazeRenderer = new MazeRenderer(this.context);
 	}
 
-
+               //TODO CREATE GAME CONTEXT!!
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -45,7 +37,7 @@ public class ViewManager extends Application{
 		Parent mainView = loader.load();
 		
 		Controller controller = loader.getController();
-		controller.initializeGame(this.rules, this.gameStateManager, this.mazeRenderer);
+		controller.initializeGame(this.rules, this.context, this.mazeRenderer);
 		
 		Scene scene = new Scene(mainView);
 		controller.enableInput(true);

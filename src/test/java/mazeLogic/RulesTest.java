@@ -13,14 +13,14 @@ import model.Player;
 class RulesTest {
 	
 	private Player player;
-	private GeneralGameStateManager state;
+	private GameContext state;
 	private Rules rules;
 	MazeCells[][] maze;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		this.player = new Player("player",1,1);
-		this.state = new GeneralGameStateManager();
+		this.state = new GameContext();
 		
 	}
 

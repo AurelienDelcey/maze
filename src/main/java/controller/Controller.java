@@ -6,15 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import mazeLogic.GameState;
-import mazeLogic.GeneralGameStateManager;
+import mazeLogic.GameContext;
 import mazeLogic.Rules;
 import model.MoveSet;
 
 public class Controller {
 	
 	
-	private GeneralGameStateManager gameStateManager;
+	private GameContext context;
 	private Rules rules;
 	private MazeRenderer mazeRenderer;
 	private EventHandler<KeyEvent> inputHandler;
@@ -39,11 +38,11 @@ public class Controller {
 		
 	}
 	
-	public void initializeGame(Rules rules, GeneralGameStateManager state, MazeRenderer renderer){
+	public void initializeGame(Rules rules, GameContext context, MazeRenderer renderer){
 		
 		this.rules = rules;
 		this.mazeRenderer = renderer;
-		this.gameStateManager = state;
+		this.context = context;
 		this.inputHandler = e->{
 			switch(e.getCode()) {
 			case DOWN ->{movePlayer(MoveSet.DOWN);e.consume();}
@@ -52,10 +51,17 @@ public class Controller {
 			case RIGHT ->{movePlayer(MoveSet.RIGHT);e.consume();}
 			default -> {}
 			};
-			if(this.gameStateManager.getGlobalState() == GameState.VICTORY) {
-				drawVictory();
-			}
 		};
+		this.context.getStateProperty().addListener(e->{
+			switch(this.context.getGlobalState()){
+				case VICTORY -> drawVictory();
+				case IN_GAME ->{
+					victoryLabel.setOpacity(0);
+					enableInput(true);
+				}
+				default ->{}
+			};
+		});
 		renderer.storePreviousPlayerPosition();
 		renderer.renderMaze(this.mazeLayout);
 	}

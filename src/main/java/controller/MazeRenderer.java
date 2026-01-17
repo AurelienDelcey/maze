@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import mazeLogic.GameContext;
 import model.MazeCells;
 import model.MazeCellsState;
 import model.Player;
@@ -15,26 +16,26 @@ public class MazeRenderer {
 	private static final Color PLAYER_COLOR = Color.DARKGOLDENROD;
 	private static final int CELL_SIZE = 20;
 	private static final int MARGIN = 5;
-	private final Player player;
+	private final GameContext context;
 	private final Canvas[][] renderCanvas;
-	private final MazeCells[][] maze;
 	private int previousPositionX;
 	private int previousPositionY;
 	
-	public MazeRenderer(Player player, MazeCells[][] maze) {
-		this.player = player;
-		this.maze = maze;
+	public MazeRenderer(GameContext context) {
+		this.context = context;
+		MazeCells[][] maze = this.context.getMaze();
 		this.renderCanvas = new Canvas[maze.length][maze[0].length];
 		this.previousPositionX = 0;
 		this.previousPositionY = 0;
 	}
 
 	public void renderMaze(GridPane mazeLayout) {
-		for (int i = 0; i < this.maze.length; i++) {
-			for (int j = 0; j < this.maze[i].length; j++) {
+		MazeCells[][] maze = this.context.getMaze();
+		for (int i = 0; i < maze.length; i++) {
+			for (int j = 0; j < maze[i].length; j++) {
 				Canvas mazePart= new Canvas(CELL_SIZE, CELL_SIZE) ;
 				GraphicsContext gc= mazePart.getGraphicsContext2D();
-				if(this.maze[i][j].getState()== MazeCellsState.WALL) {
+				if(maze[i][j].getState()== MazeCellsState.WALL) {
 					gc.setFill(WALL_COLOR);
 				}else {
 					gc.setFill(PATH_COLOR);
@@ -55,12 +56,14 @@ public class MazeRenderer {
 	}
 
 	public void storePreviousPlayerPosition() {
-		this.previousPositionX = this.player.getxCoordonate();
-		this.previousPositionY = this.player.getyCoordonate();
+		Player player = this.context.getPlayer();
+		this.previousPositionX = player.getxCoordonate();
+		this.previousPositionY = player.getyCoordonate();
 	}
 
 	private void renderPlayerCell() {
-		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
+		Player player = this.context.getPlayer();
+		Canvas canvas = this.renderCanvas[player.getxCoordonate()][player.getyCoordonate()];
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, CELL_SIZE, CELL_SIZE);
 		gc.setFill(PATH_COLOR);
@@ -79,7 +82,8 @@ public class MazeRenderer {
 	}
 	
 	private void drawStartAndGoal(int x, int y, GraphicsContext gc) {
-		switch(this.maze[x][y].getState()){
+		MazeCells[][] maze = this.context.getMaze();
+		switch(maze[x][y].getState()){
 			case GOAL ->{
 				gc.setFill(Color.BLUE);
 				gc.fillOval(MARGIN/2, MARGIN/2, CELL_SIZE-MARGIN, CELL_SIZE-MARGIN);
@@ -93,7 +97,8 @@ public class MazeRenderer {
 	}
 
 	private void drawPlayer() {
-		Canvas canvas = this.renderCanvas[this.player.getxCoordonate()][this.player.getyCoordonate()];
+		Player player = this.context.getPlayer();
+		Canvas canvas = this.renderCanvas[player.getxCoordonate()][player.getyCoordonate()];
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.setFill(PLAYER_COLOR);
 		gc.fillOval(MARGIN/2, MARGIN/2, CELL_SIZE-MARGIN, CELL_SIZE-MARGIN);

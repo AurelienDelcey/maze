@@ -8,27 +8,25 @@ import model.MazeCells;
 
 public class Rules {
 	
-	private final MazeCells[][] maze;
-	private final Player player;
-	private final GeneralGameStateManager state;
+	private final GameContext context;
 	
 	
-	public Rules(MazeCells[][] maze, Player player, GeneralGameStateManager state) {
-		this.maze = maze;
-		this.player = player;
-		this.state = state;
+	public Rules(GameContext context) {
+		this.context = context;
 	}
 	
 	public boolean applyMove(MoveSet move) {
 		if(movementAuthorization(move)) {
 			movePlayer(move);
-			this.state.setGlobalState(checkVictory());
+			this.context.setGlobalState(checkVictory());
 			return true;
 		}
 		return false;
 	}
 	
 	private GameState checkVictory() {
+		Player player = this.context.getPlayer();
+		MazeCells[][] maze = this.context.getMaze();
 		return switch(maze[player.getxCoordonate()][player.getyCoordonate()].getState()) {
 			case EMPTY -> GameState.IN_GAME;
 			case START -> GameState.IN_GAME;
@@ -38,6 +36,7 @@ public class Rules {
 	}
 	
 	private void movePlayer(MoveSet move) {
+		Player player = this.context.getPlayer();
 		switch(move){
 			case UP -> player.setyCoordonate(player.getyCoordonate()-1);
 			case DOWN -> player.setyCoordonate(player.getyCoordonate()+1);
@@ -47,6 +46,8 @@ public class Rules {
 	}
 	
 	private boolean movementAuthorization(MoveSet move) {
+		Player player = this.context.getPlayer();
+		MazeCells[][] maze = this.context.getMaze();
 		if(!player.getMoveSet().contains(move)) {
 			return false;
 		}
