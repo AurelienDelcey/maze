@@ -19,6 +19,12 @@ public class GameContext {
 		this.player = new Player("player",0,0);
 		setPlayerOnStart();
 	}
+	
+	public GameContext(MazeCells[][] maze, Player player) {
+		this.globalState = new SimpleObjectProperty<GameState>(GameState.IN_GAME);
+		this.maze = maze;
+		this.player = player;
+	}
 
 	public MazeCells[][] getMaze() {
 		return maze;

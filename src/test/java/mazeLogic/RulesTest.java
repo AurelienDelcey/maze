@@ -13,21 +13,22 @@ import model.Player;
 class RulesTest {
 	
 	private Player player;
-	private GameContext state;
+	private GameContext context ;
 	private Rules rules;
 	MazeCells[][] maze;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		this.player = new Player("player",1,1);
-		this.state = new GameContext();
+
 		
 	}
 
 	@Test
 	void applyMove_shouldMovePlayerVertically_whenCellIsEmpty() {
 		this.maze= buildTinyEmptyMaze();
-		this.rules = new Rules(this.maze, this.player, this.state);
+		this.context = new GameContext(maze,player);
+		this.rules = new Rules(this.context);
 		boolean result = rules.applyMove(MoveSet.DOWN);
 		assertTrue(result);
 		assertEquals(1,player.getxCoordonate());
@@ -41,7 +42,8 @@ class RulesTest {
 	@Test
 	void applyMove_shouldMovePlayerHorizontally_whenCellIsEmpty() {
 		this.maze= buildTinyEmptyMaze();
-		this.rules = new Rules(this.maze, this.player, this.state);
+		this.context = new GameContext(maze,player);
+		this.rules = new Rules(this.context);
 		boolean result = rules.applyMove(MoveSet.RIGHT);
 		assertTrue(result);
 		assertEquals(2,player.getxCoordonate());
@@ -55,7 +57,8 @@ class RulesTest {
 	@Test
 	void applyMove_shouldNotMovePlayerVertically_whenCellIsWall() {
 		this.maze= buildTinyMazeWithWallsAround();
-		this.rules = new Rules(this.maze, this.player, this.state);
+		this.context = new GameContext(maze,player);
+		this.rules = new Rules(this.context);
 		boolean result = rules.applyMove(MoveSet.DOWN);
 		assertFalse(result);
 		assertEquals(1,player.getxCoordonate());
@@ -69,7 +72,8 @@ class RulesTest {
 	@Test
 	void applyMove_shouldNotMovePlayerHorizontally_whenCellIsWall() {
 		this.maze= buildTinyMazeWithWallsAround();
-		this.rules = new Rules(this.maze, this.player, this.state);
+		this.context = new GameContext(maze,player);
+		this.rules = new Rules(this.context);
 		boolean result = rules.applyMove(MoveSet.LEFT);
 		assertFalse(result);
 		assertEquals(1,player.getxCoordonate());
@@ -84,10 +88,11 @@ class RulesTest {
 	void applyMove_shouldSetGameStateToVictory_whenCellIsGoal() {
 		this.maze= buildTinyEmptyMaze();
 		maze[2][1].setState(MazeCellsState.GOAL);
-		this.rules = new Rules(this.maze, this.player, this.state);
+		this.context = new GameContext(maze,player);
+		this.rules = new Rules(this.context);
 		boolean result = rules.applyMove(MoveSet.RIGHT);
 		assertTrue(result);
-		assertEquals(GameState.VICTORY,this.state.getGlobalState());
+		assertEquals(GameState.VICTORY,this.context.getGlobalState());
 	}
 	
 	private MazeCells[][] buildTinyEmptyMaze(){
