@@ -9,7 +9,8 @@ import javafx.scene.layout.GridPane;
 import mazeLogic.GameContext;
 import mazeLogic.Rules;
 import model.MoveSet;
-
+import persistence.JsonSaver;
+import persistence.SavingContainer;
 public class Controller {
 	
 	
@@ -37,6 +38,13 @@ public class Controller {
 		this.mazeRenderer.storePreviousPlayerPosition();
 		victoryLabel.setOpacity(0);
 		enableInput(true);
+	}
+	
+	@FXML
+	public void onClickSaveAndQuit() {
+		SavingContainer saveGame = new SavingContainer(this.context.getMaze(),this.context.getPlayer());
+		JsonSaver jsonSaver = new JsonSaver(saveGame, "save.json");
+		jsonSaver.save();
 	}
 
 	@FXML
