@@ -4,10 +4,13 @@ package model;
 
 public class MazeCells {
 	
-	private final int xCoordonate;
-	private final int yCoordonate;
-	private  MazeCellsState state;
+	private int xCoordonate;
+	private int yCoordonate;
+	private MazeCellsState state;
 	
+	public MazeCells() {
+		
+	}
 	public MazeCells(int xCoordonate, int yCoordonate) {
 		this.xCoordonate = xCoordonate;
 		this.yCoordonate = yCoordonate;
@@ -28,6 +31,12 @@ public class MazeCells {
 
 	public int getyCoordonate() {
 		return yCoordonate;
+	}
+	public void setxCoordonate(int xCoordonate) {
+		this.xCoordonate = xCoordonate;
+	}
+	public void setyCoordonate(int yCoordonate) {
+		this.yCoordonate = yCoordonate;
 	}
 	
 	

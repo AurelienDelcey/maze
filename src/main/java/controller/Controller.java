@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -45,6 +46,7 @@ public class Controller {
 		SavingContainer saveGame = new SavingContainer(this.context.getMaze(),this.context.getPlayer());
 		JsonSaver jsonSaver = new JsonSaver(saveGame, "save.json");
 		jsonSaver.save();
+		Platform.exit();
 	}
 
 	@FXML

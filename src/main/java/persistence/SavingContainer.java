@@ -5,8 +5,12 @@ import model.Player;
 
 public class SavingContainer {
 	
-	private final MazeCells[][] mazeToSave;
-	private final Player playerToSave;
+	private MazeCells[][] mazeToSave;
+	private Player playerToSave;
+	
+	public SavingContainer() {
+		
+	}
 	
 	public SavingContainer(MazeCells[][] mazeToSave, Player playerToSave) {
 		this.mazeToSave = mazeToSave;
@@ -21,5 +25,12 @@ public class SavingContainer {
 		return playerToSave;
 	}
 	
+	public void setMazeToSave(MazeCells[][] mazeToSave) {
+		this.mazeToSave = mazeToSave;
+	}
+	
+	public void setPlayerToSave(Player playerToSave) {
+		this.playerToSave = playerToSave;
+	}
 	
 }
