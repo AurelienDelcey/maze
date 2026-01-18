@@ -41,6 +41,13 @@ public class GameContext {
 	public GameState getGlobalState() {
 		return this.globalState.getValue();
 	}
+	
+	public void reset() {
+		this.maze = factory.create();
+		this.player = new Player("player",0,0);
+		setPlayerOnStart();
+		setGlobalState(GameState.IN_GAME);
+	}
 
 	public void setGlobalState(GameState globalState) {
 		this.globalState.setValue(globalState);

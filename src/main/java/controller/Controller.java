@@ -30,7 +30,13 @@ public class Controller {
 	
 	@FXML
 	public void onClickReset() {
-		System.out.println("reset!");
+		enableInput(false);
+		this.context.reset();
+		this.mazeLayout.getChildren().clear();
+		this.mazeRenderer.renderMaze(mazeLayout);
+		this.mazeRenderer.storePreviousPlayerPosition();
+		victoryLabel.setOpacity(0);
+		enableInput(true);
 	}
 
 	@FXML
